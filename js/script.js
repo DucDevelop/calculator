@@ -1,4 +1,7 @@
 let displayValue = '';
+const operators = '+-/*'
+let operatorPresent = '';
+let [leftOperand, rightOperand] = ['', ''];
 
 function add(a,b) {
     return a+b;
@@ -30,10 +33,32 @@ function updateDisplay(str) {
     display.textContent = str;
 }
 
+function clear() {
+    displayValue = '';
+}
+
+function extractOperands(str) {
+    const operatorIdx = str.split('').findIndex(x => operators.includes(x));
+    return [str.slice(0,operatorIdx), str.substr(operatorIdx, 1), str.slice(operatorIdx + 1)];
+}
+
+
+
+
 document.querySelector('body').addEventListener('click', e => {
+    
     if(e.target.classList.contains('key-calculator')) {
-        displayValue += e.target.getAttribute('data-key');
+        const keyPressed = e.target.getAttribute('data-key');
+        if(keyPressed === '=') {
+            [leftOperand, operatorPresent, rightOperand] = extractOperands(displayValue);
+            displayValue = operate(operatorPresent, leftOperand, rightOperand);
+        }
+        else {
+            displayValue += keyPressed;
+        }
         updateDisplay(displayValue);
+    
+        
     }
     
 })

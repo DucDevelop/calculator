@@ -1,0 +1,10 @@
+.key-calculator {
+    border: 2px solid black;
+    width: 100px;
+    height: 100px;
+    background-color: azure;
+}
+
+.display-calculator {
+    height: 200px;  
+}

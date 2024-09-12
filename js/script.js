@@ -1,3 +1,5 @@
+let displayValue = '';
+
 function add(a,b) {
     return a+b;
 }
@@ -22,3 +24,16 @@ function operate(operator, a, b) {
         default: return NaN;
     }
 }
+
+function updateDisplay(str) {
+    const display = document.querySelector('.display-calculator');
+    display.textContent = str;
+}
+
+document.querySelector('body').addEventListener('click', e => {
+    if(e.target.classList.contains('key-calculator')) {
+        displayValue += e.target.getAttribute('data-key');
+        updateDisplay(displayValue);
+    }
+    
+})

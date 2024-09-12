@@ -16,7 +16,6 @@ function divide(a,b) {
     return a/b;
 }
 
-let opStr = '2 + 3';
 
 function operate(operator, a, b) {
     a = +a;
@@ -40,8 +39,11 @@ function clear() {
 }
 
 function extractOperands(str) {
-    const operatorIdx = str.split('').findIndex(x => operators.includes(x));
-    return [str.slice(0,operatorIdx), str.slice(operatorIdx + 1)];
+    // const operatorIdx = str.split('').findIndex(x => operators.includes(x));
+    // return [str.slice(0,operatorIdx), str.slice(operatorIdx + 1)];
+    let operands = Array.from(str.matchAll(/(.*)[\*\-\+\/]{1}(.*)/g))[0];
+    console.log([operands[1],operands[2]]);
+    return [operands[1],operands[2]];
 }
 
 

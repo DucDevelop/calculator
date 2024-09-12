@@ -19,6 +19,8 @@ function divide(a,b) {
 let opStr = '2 + 3';
 
 function operate(operator, a, b) {
+    a = +a;
+    b = +b;
     switch(operator) {
         case '+':   return add(a,b);
         case '-':   return subtract(a,b);
@@ -39,7 +41,7 @@ function clear() {
 
 function extractOperands(str) {
     const operatorIdx = str.split('').findIndex(x => operators.includes(x));
-    return [str.slice(0,operatorIdx), str.substr(operatorIdx, 1), str.slice(operatorIdx + 1)];
+    return [str.slice(0,operatorIdx), str.slice(operatorIdx + 1)];
 }
 
 
@@ -49,16 +51,43 @@ document.querySelector('body').addEventListener('click', e => {
     
     if(e.target.classList.contains('key-calculator')) {
         const keyPressed = e.target.getAttribute('data-key');
-        if(keyPressed === '=') {
-            [leftOperand, operatorPresent, rightOperand] = extractOperands(displayValue);
+        if (keyPressed === 'c') {
+            // clear button
+            displayValue = '';
+            operatorPresent = '';
+        }
+        else if(keyPressed === '=') {
+            // hit = sign
+            [leftOperand, rightOperand] = extractOperands(displayValue);
             displayValue = operate(operatorPresent, leftOperand, rightOperand);
+            operatorPresent = '=';
+        }
+        else if(operators.includes(keyPressed) && operatorPresent && operators.includes(operatorPresent)) {
+            // clicked operator but already existent: use case 2-7+
+            [leftOperand, rightOperand] = extractOperands(displayValue);
+            displayValue = operate(operatorPresent, leftOperand, rightOperand) + keyPressed;
+            operatorPresent = keyPressed;
+        }
+        else if(operators.includes(keyPressed) && operatorPresent === '=') {
+            // clicked operator after evaluation =
+            operatorPresent = keyPressed;
+            displayValue += keyPressed;
+        }
+        else if (operatorPresent === '=' && !operators.includes(keyPressed)) {
+            // after pressing = and a number reset
+            displayValue = keyPressed;
+            operatorPresent = '';
+        }
+
+        else if (operators.includes(keyPressed)) {
+            // pressing operator
+            operatorPresent = keyPressed;
+            displayValue += keyPressed;
         }
         else {
             displayValue += keyPressed;
         }
         updateDisplay(displayValue);
-    
-        
     }
     
 })

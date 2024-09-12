@@ -8,3 +8,7 @@
 .display-calculator {
     height: 200px;  
 }
+
+.pressed {
+    background-color: black;
+}

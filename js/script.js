@@ -37,9 +37,17 @@ function operate(operator, a, b) {
 
 function updateDisplay(str) {
     const display = document.querySelector('.display-calculator');
-    // display.textContent = `${Number(leftOperand)}${operatorPresent}${Number(inputValue)}`;
-    str = str === '.' ? '0.' : ''+Number(str);
-    display.textContent = str;
+    display.textContent = formatNumberDisplay(str);
+}
+
+function formatNumberDisplay(str) {
+    if (str.includes('.')) {
+        // allow leading 0s
+        return str;
+    }
+    else {
+        return ''+Number(str);
+    }
 }
 
 function clear() {
@@ -86,8 +94,6 @@ document.querySelector('body').addEventListener('click', e => {
             // do nothing
         }
         else if (keyPressed === '=') {
-            // do nothing
-            
             accumulator = calculate();
             afterEval = true;
             updateDisplay(accumulator);
@@ -128,7 +134,7 @@ document.querySelector('body').addEventListener('click', (e) => {
 
 
 document.querySelector('body').addEventListener('click', (e) => {
-    if(e.target.classList.contains('key-eval')) {
+    if(e.target.classList.contains('key-eval') || e.target.classList.contains('key-clear')) {
         const pressedOperators = document.querySelectorAll('.pressed');
         pressedOperators.forEach(item => {
             if(item !== e.target) {

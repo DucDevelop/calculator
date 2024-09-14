@@ -43,7 +43,8 @@ function updateDisplay(str) {
 function formatNumberDisplay(str) {
     if (str.includes('.')) {
         // allow leading 0s
-        return str;
+        let tmp = str.split('.')
+        return ''+Number(tmp[0]) + '.' + tmp[1];
     }
     else {
         return ''+Number(str);
@@ -62,56 +63,63 @@ function calculate() {
 }
 
 
-document.querySelector('body').addEventListener('click', e => {
-    
-    if(e.target.classList.contains('key-calculator')) {
-        const keyPressed = e.target.getAttribute('data-key');
-        if (keyPressed === 'c') {
-            // clear button
-            return clear();
-        }
-        // +-+-+3-8= -> +3-8
-        // at beginning only operator pressed
-        if (operators.includes(keyPressed) && !currentOperator) {
-            accumulator = inputValue;
-            inputValue = '0';
-            currentOperator = keyPressed;
-            updateDisplay(accumulator);
-        }
-        else if (operators.includes(keyPressed) && afterEval) {
-            inputValue = '0';
-            currentOperator = keyPressed;
-            updateDisplay(accumulator);
+function updateState(keyInput) {
+    const keyPressed = keyInput;
+    if (keyPressed === 'c') {
+        // clear button
+        return clear();
+    }
+    // +-+-+3-8= -> +3-8
+    // at beginning only operator pressed
+    if (operators.includes(keyPressed) && !currentOperator) {
+        accumulator = inputValue;
+        inputValue = '0';
+        currentOperator = keyPressed;
+        updateDisplay(accumulator);
+    }
+    else if (operators.includes(keyPressed) && afterEval) {
+        inputValue = '0';
+        currentOperator = keyPressed;
+        updateDisplay(accumulator);
+        afterEval = false;
+    }
+    else if (operators.includes(keyPressed) && currentOperator) {
+        accumulator = calculate();
+        inputValue = '0';
+        currentOperator = keyPressed;
+        updateDisplay(accumulator);
+    }
+    else if (keyPressed === '=' && !currentOperator) {
+        // do nothing
+    }
+    else if (keyPressed === '=') {
+        accumulator = calculate();
+        afterEval = true;
+        updateDisplay(accumulator);
+    }
+    else if (number.includes(keyPressed)) {
+        if (afterEval) {
+            inputValue = keyPressed;
+            accumulator = '0';
+            currentOperator = '';
             afterEval = false;
         }
-        else if (operators.includes(keyPressed) && currentOperator) {
-            accumulator = calculate();
-            inputValue = '0';
-            currentOperator = keyPressed;
-            updateDisplay(accumulator);
+        else if (!(inputValue.includes('.') && keyPressed === '.')) {
+            inputValue += keyPressed;
         }
-        else if (keyPressed === '=' && !currentOperator) {
-            // do nothing
-        }
-        else if (keyPressed === '=') {
-            accumulator = calculate();
-            afterEval = true;
-            updateDisplay(accumulator);
-        }
-        else if (number.includes(keyPressed)) {
-            if (afterEval) {
-                inputValue = keyPressed;
-                accumulator = '0';
-                currentOperator = '';
-                afterEval = false;
-            }
-            else if (!(inputValue.includes('.') && keyPressed === '.')) {
-                inputValue += keyPressed;
-            }
-            updateDisplay(inputValue);
-        }
+        updateDisplay(inputValue);
     }
-    
+}
+
+function validateKeyboardInput(key) {
+    return operators.includes(key) || number.includes(key) || key === '=';
+}
+
+
+document.querySelector('body').addEventListener('click', e => {
+    if(e.target.classList.contains('key-calculator')) {
+        updateState(e.target.getAttribute('data-key'));
+    }
 })
 
 
@@ -144,3 +152,10 @@ document.querySelector('body').addEventListener('click', (e) => {
     }
 
 })
+
+
+document.querySelector('body').addEventListener('keypress', (e) => {
+    const key = e.key === 'Enter'? '=' : e.key;
+    updateState(key);
+})
+

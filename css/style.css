@@ -1,14 +1,30 @@
+* {
+    font-size: large;
+}
+
 .key-calculator {
     border: 2px solid black;
     width: 100px;
     height: 100px;
     background-color: azure;
+    flex-grow: 1;
 }
 
 .display-calculator {
-    height: 200px;  
+    height: 200px;
+    width: 400px;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding: 64px;
+    border: 1px solid black;
+}
+.row-calculator {
+    width : 500px;
+    display: flex;
+    justify-content: start;
 }
 
 .pressed {
-    background-color: black;
+    background-color: white;
 }

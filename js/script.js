@@ -1,7 +1,13 @@
-let displayValue = '';
+let inputValue = '0';
+let accumulator = '0';
+let afterEval = false;
+
 const operators = '+-/*'
-let operatorPresent = '';
-let [leftOperand, rightOperand] = ['', ''];
+const number = '0123456789.'
+
+let currentOperator = '';
+
+
 
 function add(a,b) {
     return a+b;
@@ -24,29 +30,28 @@ function operate(operator, a, b) {
         case '+':   return add(a,b);
         case '-':   return subtract(a,b);
         case '*':   return multiply(a,b);
-        case '/':   return divide(a,b);
+        case '/':   return b !== 0 ?  divide(a,b) : NaN;
         default: return NaN;
     }
 }
 
 function updateDisplay(str) {
     const display = document.querySelector('.display-calculator');
+    // display.textContent = `${Number(leftOperand)}${operatorPresent}${Number(inputValue)}`;
+    str = str === '.' ? '0.' : ''+Number(str);
     display.textContent = str;
 }
 
 function clear() {
-    displayValue = '';
+    inputValue = '0';
+    accumulator = '0';
+    currentOperator = '';
+    updateDisplay(accumulator);
 }
 
-function extractOperands(str) {
-    // const operatorIdx = str.split('').findIndex(x => operators.includes(x));
-    // return [str.slice(0,operatorIdx), str.slice(operatorIdx + 1)];
-    let operands = Array.from(str.matchAll(/(.*)[\*\-\+\/]{1}(.*)/g))[0];
-    console.log([operands[1],operands[2]]);
-    return [operands[1],operands[2]];
+function calculate() {
+    return ''+operate(currentOperator, accumulator, inputValue);
 }
-
-
 
 
 document.querySelector('body').addEventListener('click', e => {
@@ -55,41 +60,81 @@ document.querySelector('body').addEventListener('click', e => {
         const keyPressed = e.target.getAttribute('data-key');
         if (keyPressed === 'c') {
             // clear button
-            displayValue = '';
-            operatorPresent = '';
+            return clear();
         }
-        else if(keyPressed === '=') {
-            // hit = sign
-            [leftOperand, rightOperand] = extractOperands(displayValue);
-            displayValue = operate(operatorPresent, leftOperand, rightOperand);
-            operatorPresent = '=';
+        // +-+-+3-8= -> +3-8
+        // at beginning only operator pressed
+        if (operators.includes(keyPressed) && !currentOperator) {
+            accumulator = inputValue;
+            inputValue = '0';
+            currentOperator = keyPressed;
+            updateDisplay(accumulator);
         }
-        else if(operators.includes(keyPressed) && operatorPresent && operators.includes(operatorPresent)) {
-            // clicked operator but already existent: use case 2-7+
-            [leftOperand, rightOperand] = extractOperands(displayValue);
-            displayValue = operate(operatorPresent, leftOperand, rightOperand) + keyPressed;
-            operatorPresent = keyPressed;
+        else if (operators.includes(keyPressed) && afterEval) {
+            inputValue = '0';
+            currentOperator = keyPressed;
+            updateDisplay(accumulator);
+            afterEval = false;
         }
-        else if(operators.includes(keyPressed) && operatorPresent === '=') {
-            // clicked operator after evaluation =
-            operatorPresent = keyPressed;
-            displayValue += keyPressed;
+        else if (operators.includes(keyPressed) && currentOperator) {
+            accumulator = calculate();
+            inputValue = '0';
+            currentOperator = keyPressed;
+            updateDisplay(accumulator);
         }
-        else if (operatorPresent === '=' && !operators.includes(keyPressed)) {
-            // after pressing = and a number reset
-            displayValue = keyPressed;
-            operatorPresent = '';
+        else if (keyPressed === '=' && !currentOperator) {
+            // do nothing
         }
-
-        else if (operators.includes(keyPressed)) {
-            // pressing operator
-            operatorPresent = keyPressed;
-            displayValue += keyPressed;
+        else if (keyPressed === '=') {
+            // do nothing
+            
+            accumulator = calculate();
+            afterEval = true;
+            updateDisplay(accumulator);
         }
-        else {
-            displayValue += keyPressed;
+        else if (number.includes(keyPressed)) {
+            if (afterEval) {
+                inputValue = keyPressed;
+                accumulator = '0';
+                currentOperator = '';
+                afterEval = false;
+            }
+            else if (!(inputValue.includes('.') && keyPressed === '.')) {
+                inputValue += keyPressed;
+            }
+            updateDisplay(inputValue);
         }
-        updateDisplay(displayValue);
     }
     
+})
+
+
+document.querySelector('body').addEventListener('click', (e) => {
+    if(e.target.classList.contains('key-operator')) {
+        // check if there are operator buttons pressed
+        const pressedOperators = document.querySelectorAll('.pressed');
+        // is it the same as the pressed button?
+        pressedOperators.forEach(item => {
+            if(item !== e.target) {
+                item.classList.remove('pressed');
+            }
+        })
+        e.target.classList.add('pressed');
+        // -> yes: do nothing
+        // -> no: toggle both buttons
+    }
+
+})
+
+
+document.querySelector('body').addEventListener('click', (e) => {
+    if(e.target.classList.contains('key-eval')) {
+        const pressedOperators = document.querySelectorAll('.pressed');
+        pressedOperators.forEach(item => {
+            if(item !== e.target) {
+                item.classList.remove('pressed');
+            }
+        })
+    }
+
 })

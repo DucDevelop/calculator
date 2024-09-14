@@ -1,30 +1,90 @@
+@font-face {
+    font-family: "DSEG14-Modern-MINI";
+    src: url("../fonts-DSEG_v050b1/DSEG14-Modern-MINI/DSEG14ModernMini-Light.woff");
+}
+@font-face {
+    font-family: "DSEG7-Modern-MINI";
+    src: url("../fonts-DSEG_v050b1/DSEG7-Modern-MINI/DSEG7ModernMini-Light.woff");
+}
+
+.calculator-style {
+    font-family: "DSEG7-Modern-MINI";
+    background-color: #89C270;
+}
+
+
 * {
     font-size: large;
+    
+}
+
+body {
+    border: 2px dotted red;
+    display: flex;
+    justify-content: center;
+}
+
+.calculator {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px solid black;
+    box-sizing: border-box;
+    width: 500px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.key-del {
+    /* flex-grow: 1; */
 }
 
 .key-calculator {
-    border: 2px solid black;
     width: 100px;
     height: 100px;
+    border-radius: 50%;
     background-color: azure;
-    flex-grow: 1;
+    margin: 8px;
+    /* flex-grow: 1; */
 }
 
 .display-calculator {
-    height: 200px;
-    width: 400px;
+    /* height: 200px;
+    width: 400px; */
     display: flex;
     justify-content: end;
     align-items: end;
     padding: 64px;
     border: 1px solid black;
+    flex-grow: 1;
 }
 .row-calculator {
-    width : 500px;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
+    border: 5px solid rgb(52, 188, 151);
+    padding: 8px;
+}
+
+.key-number{
+    background-color: white;
+    
+}
+.key-operator{
+    background-color: rgba(92, 6, 123, 0.469);
 }
 
 .pressed {
     background-color: white;
 }
+
+.display-container {
+    height: 200px;
+    border: 1px solid black;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    padding: 8px;
+}
+

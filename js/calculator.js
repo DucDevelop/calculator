@@ -1,4 +1,3 @@
-
 function add(a,b) {
     return a+b;
 }
@@ -39,10 +38,15 @@ let calcState = {
             else if (!this.currentInput) {
                 this.currentInput = keyInput;
             }
-            else if (!(this.currentInput.includes('.') && keyPressed === '.')) {
+            // else if (this.currentInput.startsWith('0') && keyInput === '0') {
+            //     // ignore leading 0s
+            //     this.currentInput += keyInput;
+            // }
+            else if (!(this.currentInput.includes('.') && keyInput === '.')) {
                 this.currentInput += keyInput;
             }
         }
+
         else if(!this.accumulator && !this.operator && this.operators.includes(keyInput)) {
             // load accumulator and operator
             this.accumulator = this.currentInput;
@@ -69,8 +73,9 @@ let calcState = {
     },
     clear : function () {
         this.currentInput = '0';
-        this.accumulator = '0';
-        this.currentOperator = '';
+        this.accumulator = null;
+        this.currentOperator = null;
+        this.init = true;
     },
 
     calculate : function () {

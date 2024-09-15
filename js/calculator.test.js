@@ -1,5 +1,9 @@
 const calcState = require("./calculator");
 
+beforeEach(() => {
+    calcState.clear();
+});
+  
 
 describe('calculator logic', () => {
     test('1+2= is equal to 3', () => {
@@ -9,6 +13,17 @@ describe('calculator logic', () => {
         calcState.updateState('=');
         const result = calcState.currentInput;
         expect(result).toBe('3');
+    });
+    test('1+c1+1= is equal to 2', () => {
+        calcState.updateState('1');
+        calcState.updateState('+');
+        calcState.updateState('c');
+        calcState.updateState('1');
+        calcState.updateState('+');
+        calcState.updateState('1');
+        calcState.updateState('=');
+        const result = calcState.currentInput;
+        expect(result).toBe('2');
     });
     test('1+2=+7 is equal to 10', () => {
         calcState.updateState('1');
@@ -58,6 +73,27 @@ describe('calculator logic', () => {
         const result = calcState.currentInput;
 
         expect(result).toBe('NaN');
+    });
+    test('Handle leading 0s 005+', () => {
+        calcState.updateState('0');
+        calcState.updateState('0');
+        calcState.updateState('5');
+
+        const result = calcState.currentInput;
+
+        expect(result).toBe('5');
+    });
+    test('Handle leading multiple .', () => {
+        calcState.updateState('0');
+        calcState.updateState('.');
+        calcState.updateState('5');
+        calcState.updateState('.');
+        calcState.updateState('.');
+        calcState.updateState('5');
+
+        const result = calcState.currentInput;
+
+        expect(result).toBe('0.55');
     });
 
 });

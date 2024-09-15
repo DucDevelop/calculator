@@ -27,8 +27,6 @@ let calcState = {
         }
             // +-+-+3-8= -> +3-8
         // at beginning only operator pressed
-
-
         if(this.number.includes(keyInput)) {
             // update currentInput
             if (this.init) {
@@ -38,10 +36,11 @@ let calcState = {
             else if (!this.currentInput) {
                 this.currentInput = keyInput;
             }
-            // else if (this.currentInput.startsWith('0') && keyInput === '0') {
-            //     // ignore leading 0s
-            //     this.currentInput += keyInput;
-            // }
+            else if (this.currentInput.match(/^0/g) && !this.currentInput.includes('.') && keyInput !== '.') {
+                // ignore leading 0s
+                this.currentInput = keyInput;
+                
+            }
             else if (!(this.currentInput.includes('.') && keyInput === '.')) {
                 this.currentInput += keyInput;
             }

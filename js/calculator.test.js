@@ -95,5 +95,42 @@ describe('calculator logic', () => {
 
         expect(result).toBe('0.55');
     });
+    test('Delete key', () => {
+        calcState.updateState('0');
+        calcState.updateState('.');
+        calcState.updateState('5');
+        calcState.updateState('.');
+        calcState.updateState('.');
+        calcState.updateState('Backspace');
+        const result = calcState.currentInput;
+
+        expect(result).toBe('0.');
+    });
+    test('Delete key 2', () => {
+        calcState.updateState('0');
+        calcState.updateState('.');
+        calcState.updateState('Backspace');
+        calcState.updateState('Backspace');
+        const result = calcState.currentInput;
+
+        expect(result).toBe('0');
+    });
+    test('Delete key 3', () => {
+        calcState.updateState('0');
+        calcState.updateState('+');
+        calcState.updateState('Backspace');
+        calcState.updateState('Backspace');
+        const result = calcState.currentInput;
+
+        expect(result).toBe(null);
+    });
+    test('Backspace after operand 5*Backspace=', () => {
+        calcState.updateState('5');
+        calcState.updateState('*');
+        calcState.updateState('Backspace');
+        const result = calcState.currentInput;
+
+        expect(result).toBe(null);
+    });
 
 });

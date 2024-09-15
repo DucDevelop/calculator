@@ -25,9 +25,20 @@ let calcState = {
             // clear button
             this.clear();
         }
+        if (keyInput === 'Backspace') {
+            if (this.currentInput) {
+                if (this.currentInput.length > 1) {
+                    this.currentInput = this.currentInput.slice(0, this.currentInput.length - 1);
+                }
+                else {
+                    this.currentInput = '0';
+                }
+            }
+
+        }
             // +-+-+3-8= -> +3-8
         // at beginning only operator pressed
-        if(this.number.includes(keyInput)) {
+        else if(this.number.includes(keyInput)) {
             // update currentInput
             if (this.init) {
                 this.init = false;

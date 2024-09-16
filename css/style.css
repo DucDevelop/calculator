@@ -8,7 +8,7 @@
 }
 
 .calculator-style {
-    font-family: "DSEG7-Modern-MINI";
+    font-family: "DSEG14-Modern-MINI";
     background-color: #89C270;
 }
 
@@ -53,6 +53,7 @@ body {
     /* height: 200px;
     width: 400px; */
     display: flex;
+    flex-direction: column;
     justify-content: end;
     align-items: end;
     padding: 64px;

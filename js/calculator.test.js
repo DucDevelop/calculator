@@ -11,7 +11,7 @@ describe('calculator logic', () => {
         calcState.updateState('+');
         calcState.updateState('2');
         calcState.updateState('=');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
         expect(result).toBe('3');
     });
     test('1+c1+1= is equal to 2', () => {
@@ -22,7 +22,7 @@ describe('calculator logic', () => {
         calcState.updateState('+');
         calcState.updateState('1');
         calcState.updateState('=');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
         expect(result).toBe('2');
     });
     test('1+2=+7 is equal to 10', () => {
@@ -33,7 +33,7 @@ describe('calculator logic', () => {
         calcState.updateState('+');
         calcState.updateState('7');
         calcState.updateState('=');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
         expect(result).toBe('10');
     });
     test('3*5*-+/2= is equal to 7.5', () => {
@@ -46,7 +46,7 @@ describe('calculator logic', () => {
         calcState.updateState('/');
         calcState.updateState('2');
         calcState.updateState('=');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
         expect(result).toBe('7.5');
     });
     test('1+2-', () => {
@@ -55,9 +55,9 @@ describe('calculator logic', () => {
         calcState.updateState('2');
         calcState.updateState('-');
 
-        const input = calcState.currentInput;
-        const acc = calcState.accumulator;
-        const operator = calcState.currentOperator;
+        const input = calcState.currentState.input;
+        const acc = calcState.currentState.accumulator;
+        const operator = calcState.currentState.operator;
         expect(input).toBe(null);
         expect(acc).toBe('3');
         expect(operator).toBe('-');
@@ -70,7 +70,7 @@ describe('calculator logic', () => {
         calcState.updateState('0');
         calcState.updateState('=');
 
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe('NaN');
     });
@@ -79,7 +79,7 @@ describe('calculator logic', () => {
         calcState.updateState('0');
         calcState.updateState('5');
 
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe('5');
     });
@@ -91,7 +91,7 @@ describe('calculator logic', () => {
         calcState.updateState('.');
         calcState.updateState('5');
 
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe('0.55');
     });
@@ -102,7 +102,7 @@ describe('calculator logic', () => {
         calcState.updateState('.');
         calcState.updateState('.');
         calcState.updateState('Backspace');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe('0.');
     });
@@ -111,7 +111,7 @@ describe('calculator logic', () => {
         calcState.updateState('.');
         calcState.updateState('Backspace');
         calcState.updateState('Backspace');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe('0');
     });
@@ -120,7 +120,7 @@ describe('calculator logic', () => {
         calcState.updateState('+');
         calcState.updateState('Backspace');
         calcState.updateState('Backspace');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe(null);
     });
@@ -128,7 +128,7 @@ describe('calculator logic', () => {
         calcState.updateState('5');
         calcState.updateState('*');
         calcState.updateState('Backspace');
-        const result = calcState.currentInput;
+        const result = calcState.currentState.input;
 
         expect(result).toBe(null);
     });

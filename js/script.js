@@ -21,11 +21,14 @@ let calcState = {
         operator : null,
         init : true,
         display : {first : '', second : '0'},
+        keyInput : null
     },
     lastState : {},
 
     updateState : function (keyInput) {
         this.lastState = { ...this.currentState };
+
+        this.currentState.keyInput = keyInput;
         if (keyInput === 'c') {
             // clear button
             this.clear();
@@ -108,7 +111,11 @@ let calcState = {
     },
 
     updateDisplay : function () {
-        if (this.currentState.init && this.lastState.operator) {
+        if (this.currentState.keyInput === 'c') {
+            this.currentState.display.first = '';
+            this.currentState.display.second = '0';
+        }
+        else if (this.currentState.init && this.lastState.operator) {
             this.currentState.display.first = `${this.lastState.accumulator} ${this.lastState.operator} ${this.lastState.input}`;
         }
         if (this.currentState.operator) {
